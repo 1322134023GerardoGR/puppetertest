@@ -22,14 +22,26 @@ export class ScrapingService {
         const columns = row.querySelectorAll('td');
 
         const number = columns[0]?.textContent?.trim();
-        const name = columns[2]?.querySelector('a')?.textContent?.trim();
+
+        // Determinar si la segunda columna es la imagen o el nombre
+        let name = null;
+        let type1Element = null;
+        let type2Element = null;
+
+        if (columns[1]?.querySelector('a img')) {
+          name = columns[2]?.querySelector('a')?.textContent?.trim();
+          type1Element = columns[3]?.querySelectorAll('a')[1];
+          type2Element = columns[4]?.querySelectorAll('a')[1];
+        } else {
+          name = columns[1]?.querySelector('a')?.textContent?.trim();
+          type1Element = columns[2]?.querySelectorAll('a')[1];
+          type2Element = columns[3]?.querySelectorAll('a')[1];
+        }
 
         // Si no se encuentra el type1, asignar un valor predeterminado
-        const type1Element = columns[3]?.querySelectorAll('a')[1];
         const type1 = type1Element ? type1Element.textContent?.trim() : 'Unknown';
 
         // Si no se encuentra el type2, dejarlo como null
-        const type2Element = columns[4]?.querySelectorAll('a')[1];
         const type2 = type2Element ? type2Element.textContent?.trim() : null;
 
         return {
